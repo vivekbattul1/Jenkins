@@ -1,0 +1,62 @@
+Jenkins & Maven: Build Jar using Maven
+=======================================
+
+Prerequisite: 
+i. add maven plugin ( maven integration plugin) :
+goto manage jenkins ---> manage plugin ---> click on available ---> search maven plugin select and install
+
+ii. maven configuration:
+go to  manage jenkins ---> global tool configuration ----> find "maven" section ---> click "Add Maven" ---> give name anything in name section ex: jenkins-maven 
+---> check install automatically checkbox ----> select version ----> save 
+
+Step 1: create New job
+=======================
+click on "New Item" ---> Enter item name ex: "Maven-job"  ---> click on "freestyle project" ---> click on "Ok"  after this you will land on configuration page.
+
+
+Step 2: General section
+========================
+In Description section add description about job
+
+
+Step 3: Source Code Management
+==============================
+go to "Source Code Management" section ---> select "Git" ---> add repository url and credentials (for private repo) ---> add branch (by default it take master branch) 
+
+
+Step 4: Build
+=============
+go to "build" section ---> click on "add build step" ---> 
+select "Invoke top-level Maven targets" ----> select maven version using dropdown list box ---> in goals add -B -DskipTests clean package  
+
+//-B -DskipTests clean package it will build the jar   the following command for build jar in jenkins job we didn't enter following command mvn -B -DskipTests clean package
+instead we use -B -DskipTests clean package.
+jar is created  on following path /var/jenkins_home/workspace/maven-job/target/my-app-1.0-SNAPSHOT.jar 
+
+once again click on "add build step" --->
+select "Invoke top-level Maven targets" ----> select maven version using dropdown list box ---> in goals add "test" 
+
+//test it will check test cases 
+
+
+once again click on "add build step" --->
+select "Execute Shell" ---> add command ---> java -jar /var/jenkins_home/workspace/maven-job/target/my-app-1.0-SNAPSHOT.jar
+
+//  following is path where our jar is created  /var/jenkins_home/workspace/maven-job/target/my-app-1.0-SNAPSHOT.jar 
+
+
+Step 5: Post-build Actions
+==========================
+go to "Post-build Actions" ----> click on "Add post-build action"---->
+select "Archive the artifacts" --> in "File to Archive" --> target/*.jar    // give the path of jar where created.
+//this will show you jar on job display page you can click and download the jar.
+
+go to "Post-build Actions" ----> click on "Add post-build action"---->
+select "Publish Junit test result report" ---> in "Test report XMLs" --> target/surefire-reports/*.xml  //It show report on jobs page
+
+
+save the configuraton
+
+build you first job and be happy :)
+
+
