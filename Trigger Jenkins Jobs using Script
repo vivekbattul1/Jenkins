@@ -38,7 +38,7 @@ curl -u "<username>:<password>" -H "$crumb" -X POST http://<ip or domain>:8080/j
 
 vi crumb.sh
 ============
-#/bin/bash
+#!/bin/bash
 crumb=$(curl -u "<username>:<password>" -s 'http://<ip or domain>:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
 curl -u "<username>:<password>" -H "$crumb" -X POST http://<ip or domain>:8080/job/Hello_World/build?delay=0sec
 
