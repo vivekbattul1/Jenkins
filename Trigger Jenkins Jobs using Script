@@ -1,0 +1,66 @@
+Trigger Jenkins Jobs using Script :
+==================================
+
+1. Without Parameterized job:
+==============================
+
+
+1. Go to jenkins job ---> right click on "Build Now" ---> select copy link address ----> paste in browser and copy the link and take to notepad which is going to use in script
+ex: http://13.233.89.49:8080/job/Hello_World/build?delay=0sec
+
+2. We need to create crumb with is somethinglike a token you need the token while calling the job using script.
+How to Generate crumb : Generate crumb using below command
+NOTE: Make sure before running command port 80 or 443 is open because curl command use port 80 for http and port 443 for https
+=====
+syntax:
+=======
+crumb=$(curl -u "<username>:<password>" -s '<http or https>://<your jenkins srver ip or dns name>:<port>/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+
+Example:
+========
+#crumb=$(curl -u "jenkins:1234" -s 'http://13.233.89.49:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+
+verify whether token is created or not follow below steps
+#echo $crumb     // It prints the token value
+Jenkins-Crumb:282a520fa27e222909f22ad2d6ba203b3ec9b9d8226114f4fbc84de891633cc6
+
+3. Now need to create the command to run command line to run the job:
+syntax:
+=======
+curl -u "<username:password>" -H "$crumb" -X POST <http or https>:<copy the build copy link address>
+
+Example: 
+========
+curl -u "jenkins:1234" -H "$crumb" -X POST http://13.233.89.49:8080/job/Hello_World/build?delay=0sec
+
+
+4. Make a script and run to build the job
+
+vi crumb.sh
+============
+#/bin/bash
+crumb=$(curl -u "jenkins:1234" -s 'http://13.233.89.49:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+curl -u "jenkins:1234" -H "$crumb" -X POST http://13.233.89.49:8080/job/Hello_World/build?delay=0sec
+
+save the file and exit
+
+#chmod +x crumb.sh
+
+#sh crumb.sh
+
+======================================================================================
+!!! CONGRATS YOU SUCCESSFULLY RUN YOUR JOB WITHOUT PARAMETERIZED JOB USING SCRIPT !!!
+======================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
