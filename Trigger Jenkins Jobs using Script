@@ -6,7 +6,7 @@ Trigger Jenkins Jobs using Script :
 
 
 1. Go to jenkins job ---> right click on "Build Now" ---> select copy link address ----> paste in browser and copy the link and take to notepad which is going to use in script
-ex: http://13.233.89.49:8080/job/Hello_World/build?delay=0sec
+ex: http://<ip or domain>:8080/job/Hello_World/build?delay=0sec
 
 2. We need to create crumb with is somethinglike a token you need the token while calling the job using script.
 How to Generate crumb : Generate crumb using below command
@@ -18,7 +18,7 @@ crumb=$(curl -u "<username>:<password>" -s '<http or https>://<your jenkins srve
 
 Example:
 ========
-#crumb=$(curl -u "jenkins:1234" -s 'http://13.233.89.49:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+#crumb=$(curl -u "<username>:<password>" -s 'http://<ip or domain>:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
 
 verify whether token is created or not follow below steps
 #echo $crumb     // It prints the token value
@@ -31,7 +31,7 @@ curl -u "<username:password>" -H "$crumb" -X POST <http or https>:<copy the buil
 
 Example: 
 ========
-curl -u "jenkins:1234" -H "$crumb" -X POST http://13.233.89.49:8080/job/Hello_World/build?delay=0sec
+curl -u "<username>:<password>" -H "$crumb" -X POST http://<ip or domain>:8080/job/Hello_World/build?delay=0sec
 
 
 4. Make a script and run to build the job
@@ -39,8 +39,8 @@ curl -u "jenkins:1234" -H "$crumb" -X POST http://13.233.89.49:8080/job/Hello_Wo
 vi crumb.sh
 ============
 #/bin/bash
-crumb=$(curl -u "jenkins:1234" -s 'http://13.233.89.49:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
-curl -u "jenkins:1234" -H "$crumb" -X POST http://13.233.89.49:8080/job/Hello_World/build?delay=0sec
+crumb=$(curl -u "<username>:<password>" -s 'http://<ip or domain>:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+curl -u "<username>:<password>" -H "$crumb" -X POST http://<ip or domain>:8080/job/Hello_World/build?delay=0sec
 
 save the file and exit
 
